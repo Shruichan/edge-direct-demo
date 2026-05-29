@@ -1,0 +1,14 @@
+/bin/
+/dist/
+*.test
+*.out
+coverage.out
+
+# local agent artifacts
+/certs/
+device.json
+
+# editors
+.idea/
+.vscode/
+*.swp
