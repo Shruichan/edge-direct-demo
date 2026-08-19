@@ -22,7 +22,8 @@ type Publisher struct {
 }
 
 func Dial(ctx context.Context, url, exchange string, logger *slog.Logger) (*Publisher, error) {
-	// amqp.DialConfig doesn't honor context, so we wrap it.
+	// amqp.Dial blocks and ignores context, so we run it in a goroutine and
+	// race it against ctx ourselves.
 	type dialResult struct {
 		c   *amqp.Connection
 		err error

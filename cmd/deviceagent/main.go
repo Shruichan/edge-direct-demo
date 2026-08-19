@@ -50,9 +50,9 @@ func loadAgentConfig() (agentConfig, error) {
 }
 
 type enrollment struct {
-	DeviceID           string
-	CommandTopic       string
-	TelemetryTopic     string
+	DeviceID       string
+	CommandTopic   string
+	TelemetryTopic string
 }
 
 func main() {
@@ -125,9 +125,9 @@ func run(logger *slog.Logger) error {
 	}
 }
 
-// ensureEnrolled checks the cert dir for prior enrollment. If anything's
-// missing it calls /v1/enroll and writes the response to disk. The marker file
-// "device.json" records the topic strings so we don't have to re-derive them.
+// ensureEnrolled is idempotent across reboots. If we've enrolled before, the
+// cert dir has a device.json marker and we just reload it. Otherwise we call
+// /v1/enroll once and stash the cert, key, and topic names for next time.
 func ensureEnrolled(ctx context.Context, cfg agentConfig, logger *slog.Logger) (enrollment, error) {
 	if err := os.MkdirAll(cfg.CertDir, 0o755); err != nil {
 		return enrollment{}, err
@@ -174,7 +174,8 @@ func ensureEnrolled(ctx context.Context, cfg agentConfig, logger *slog.Logger) (
 		return enrollment{}, err
 	}
 
-	// Persist cert + key with restrictive perms.
+	// The private key is the only real secret here, so it gets 0600. The cert
+	// and CA are public material — 0644 is fine.
 	if err := os.WriteFile(filepath.Join(cfg.CertDir, "cert.pem"), []byte(er.Certificate), 0o644); err != nil {
 		return enrollment{}, err
 	}

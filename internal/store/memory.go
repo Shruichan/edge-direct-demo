@@ -9,8 +9,8 @@ import (
 	"github.com/romedrori/edge-direct-demo/internal/device"
 )
 
-// Memory is an in-process Repo. We use it in tests and for the agent's local
-// scratch state; production runs against postgres.
+// Memory is an in-process Repo for the unit tests. The real services run
+// against Postgres.
 type Memory struct {
 	mu        sync.RWMutex
 	devices   map[string]device.Device

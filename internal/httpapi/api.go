@@ -71,12 +71,12 @@ type enrollRequest struct {
 }
 
 type enrollResponse struct {
-	DeviceID            string `json:"device_id"`
-	Certificate         string `json:"certificate"`
-	PrivateKey          string `json:"private_key"`
-	IssuingCA           string `json:"issuing_ca"`
-	MQTTCommandTopic    string `json:"mqtt_command_topic"`
-	MQTTTelemetryTopic  string `json:"mqtt_telemetry_topic"`
+	DeviceID           string `json:"device_id"`
+	Certificate        string `json:"certificate"`
+	PrivateKey         string `json:"private_key"`
+	IssuingCA          string `json:"issuing_ca"`
+	MQTTCommandTopic   string `json:"mqtt_command_topic"`
+	MQTTTelemetryTopic string `json:"mqtt_telemetry_topic"`
 }
 
 func (s *Server) handleEnroll(w http.ResponseWriter, r *http.Request) {
@@ -215,8 +215,9 @@ func (s *Server) handleSendCommand(w http.ResponseWriter, r *http.Request) {
 }
 
 func deviceIDFor(tenant, serial string) string {
-	// Stable, opaque, human-readable enough for logs. Re-enrolling the same
-	// hardware returns the same id, which is what we want.
+	// Deterministic on purpose: re-enroll the same box and you land on the same
+	// id (and the same row). Readable in logs too — and it's not a secret, the
+	// bootstrap token is what actually gates enrollment.
 	return "dev_" + tenant + "_" + serial
 }
 

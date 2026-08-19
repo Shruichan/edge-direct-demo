@@ -64,7 +64,8 @@ func (i *Issuer) Issue(ctx context.Context, commonName string, ttl time.Duration
 	return c, nil
 }
 
-// Revoke is used when a device is decommissioned or quarantined.
+// Revoke pulls a device's cert when it's decommissioned or quarantined. Nothing
+// calls it yet — the quarantine flow is still a TODO — but the plumbing's here.
 func (i *Issuer) Revoke(ctx context.Context, serial string) error {
 	path := fmt.Sprintf("%s/revoke", i.mount)
 	_, err := i.client.Logical().WriteWithContext(ctx, path, map[string]any{
