@@ -1,12 +1,12 @@
 # edge-direct-demo
 
-A miniature management plane for a fleet of IoT access points. Built as a
-working sketch of the stack that Walmart's Edge Direct team runs in production
-(Go services, Postgres, RabbitMQ, MQTT, HashiCorp Vault PKI).
+A miniature management plane for a fleet of IoT access points, built the way a
+production edge platform is built: Go services, Postgres, RabbitMQ, MQTT, and
+HashiCorp Vault PKI.
 
-The point isn't to be feature-complete — it's to exercise the integration
-points end-to-end so the design tradeoffs (cert issuance flow, telemetry
-fan-out, command dispatch, schema choices) are concrete instead of hand-wavy.
+The point isn't to be feature-complete. It's to exercise the integration points
+end to end, so the design tradeoffs (cert issuance flow, telemetry fan-out,
+command dispatch, schema choices) are concrete instead of hand-wavy.
 
 ## What's in the box
 
